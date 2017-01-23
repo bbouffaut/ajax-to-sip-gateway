@@ -1,9 +1,9 @@
 # README #
 
-This project aims at implementing a WebApp to SIP gateway in order to
+This project aims at implementing a **WebApp to SIP gateway** in order to
 access SIP services from any web browser. It has been issued in 2009 and is based on Google Web Toolkit framework for the client part. 
 
-**NB**: this project is not maintained anymore since it is based on a old-fashioned AJAX polling approach.***It should be rewritten to use WebRTC current technologies***.
+**NB**: this project is not maintained anymore since it is based on a old-fashioned AJAX polling approach.***It should be rewritten to use WebRTC current technologies***. However, most of the logic would be re-usable in WebRTC context.
 
 ## Content ##
 
