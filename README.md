@@ -23,7 +23,7 @@ access SIP services from any web browser. It has been issued in 2009 and is base
 services (telephony, video)
 
 ### Architecture Overview ###
-![Chatroom Application Server presentation.png](https://bitbucket.org/repo/7jk8ry/images/3858223146-Chatroom%20Application%20Server%20presentation.png)
+![alt tag](https://github.com/bbouffaut/ajax-to-sip-gateway.git/master/Docs/ajax-2-sip-gateway-presentation.png)
 
 ## Set-up ##
 
