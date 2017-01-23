@@ -1,0 +1,274 @@
+
+package fr.free.hd.bond.chatroom.client;
+
+import com.google.gwt.user.client.ui.*;
+import com.google.gwt.core.client.*;
+import com.google.gwt.user.client.*;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+class SipUAC {
+  private static String AVAILABLE = "AVAILABLE";
+
+  private static String WAIT_FOR_ACK = "WAIT_FOR_ACK";
+
+  private static String WAIT_FOR_RESPONSE = "WAIT_FOR_RESPONSE";
+
+  private static String ONCALL = "ONCALL";
+
+  private static String OUTGOING_CALL = "OUTGOING_CALL";
+
+  private SipUAC instance;
+
+  private String state = AVAILABLE;
+
+  private String sessionId;
+
+  private HashMap<String,PopupPanel> incomingCallsList;
+
+  private HashMap<String,MissedCall> missedCallsList;
+
+  private OngoingCall ongoingCall;
+
+  private String outgoingCallApplicationSessionId;
+
+  public SipUAC(String sessionId) {
+    this.sessionId = sessionId;
+    instance = this;
+    
+    incomingCallsList = new HashMap<String,PopupPanel>();
+    missedCallsList = new HashMap<String,MissedCall>();
+    
+    state = AVAILABLE;
+    
+  }
+
+  public void parseSipEvents(ArrayList<SipEvent> sipEvents) {
+    if (sipEvents != null)
+    	for (int i=0,N=sipEvents.size();i<N;i++) {
+    		if (state == AVAILABLE) {
+    			if (((SipEvent)sipEvents.get(i)).method.indexOf("INVITE") > -1) {
+    				SipCall call = new SipCall();
+    				call.init((SipEvent)sipEvents.get(i));
+    				IncomingCall callPopup = new IncomingCall();
+    				callPopup.init(this,call);
+    				callPopup.display();
+    				incomingCallsList.put(((SipEvent)sipEvents.get(i)).callId,callPopup);
+    			} else if (((SipEvent)sipEvents.get(i)).method.indexOf("MISSED-CALL") > -1) {
+    				if (incomingCallsList.get(((SipEvent)sipEvents.get(i)).callId) != null) {
+    					((IncomingCall)incomingCallsList.get(((SipEvent)sipEvents.get(i)).callId)).timeout();
+    					incomingCallsList.remove(((SipEvent)sipEvents.get(i)).callId);
+    				
+    					SipCall call = new SipCall();
+    					call.init((SipEvent)sipEvents.get(i));
+    					MissedCall missedCall = new MissedCall();
+    					missedCall.init(this,call,false);
+    					missedCall.display();
+    					missedCallsList.put(((SipEvent)sipEvents.get(i)).callId,missedCall);
+    				}
+    			} else if (((SipEvent)sipEvents.get(i)).method.indexOf("CANCEL") > -1)
+    				cancelIncomingCall((SipEvent)sipEvents.get(i));
+    		} else if (state == WAIT_FOR_ACK) {
+    			if (((SipEvent)sipEvents.get(i)).method.indexOf("ACK") > -1)
+    				startCall((SipEvent)sipEvents.get(i));
+    		} else if (state == WAIT_FOR_RESPONSE) {
+    			if (((SipEvent)sipEvents.get(i)).method.indexOf("INVITE-RESPONSE") > -1) {
+    				if (((SipEvent)sipEvents.get(i)).status == 200)
+    					startCall((SipEvent)sipEvents.get(i));
+    				else 
+    					cancelOutgoingCall(false);
+    			}
+    		} else if (state == ONCALL) {
+    			if (((SipEvent)sipEvents.get(i)).method.indexOf("BYE") > -1)
+    				stopOngoingCall();
+    		}
+    	
+    	}
+    
+    		
+  }
+
+  public void makeCall(String user) {
+    AsyncCallback callback = new AsyncCallback() {
+       public void onSuccess (Object callResult)
+       {	
+    	outgoingCallApplicationSessionId = (String)callResult;
+    	OutgoingCall callPopup = new OutgoingCall();
+    	callPopup.init(instance,null);
+    	callPopup.display();
+    	incomingCallsList.put(OUTGOING_CALL,callPopup);
+    	state = WAIT_FOR_RESPONSE;
+    	
+       }
+       public void onFailure (Throwable ex)
+       {
+       }
+    };
+    
+    
+    if ((incomingCallsList.get(OUTGOING_CALL) == null) && (state != ONCALL))
+    	ProxyRPC.call(sessionId,user,callback);
+  }
+
+  public void acceptCall(SipCall call) {
+    // IN CASE OF CALL START ON ACK RECEPTION
+    //state = WAIT_FOR_ACK;
+    
+    //IN CASE OF CALL START ON ACCEPT
+    startCall(call);
+    
+    AsyncCallback callback = new AsyncCallback() {
+    	public void onSuccess(Object result) {
+    		
+    	}
+    
+    	public void onFailure(Throwable caught) {
+    		
+    	}
+    };
+    
+    ProxyRPC.processCall(sessionId,call,"INVITE-RESPONSE",200,callback);
+    incomingCallsList.remove(call.callId);
+    
+    
+  }
+
+  public void rejectCall(SipCall call) {
+    AsyncCallback callback = new AsyncCallback() {
+    	public void onSuccess(Object result) {
+    		
+    	}
+    
+    	public void onFailure(Throwable caught) {
+    		
+    	}
+    };
+    
+    ProxyRPC.processCall(sessionId,call,"INVITE-RESPONSE",486,callback);
+    incomingCallsList.remove(call.callId);
+  }
+
+  public void stop() {
+    if (incomingCallsList.get(OUTGOING_CALL) != null) {
+    	cancelOutgoingCall(true);
+    	incomingCallsList.remove(OUTGOING_CALL);
+    }	
+    
+    while (incomingCallsList.values().iterator().hasNext()) {
+    	String callId = ((IncomingCall)(incomingCallsList.values().iterator().next())).call.callId;
+    	((IncomingCall)incomingCallsList.get(callId)).cancel();
+    }
+    
+    
+    while (missedCallsList.values().iterator().hasNext()) {
+    	String callId = ((MissedCall)(missedCallsList.values().iterator().next())).call.callId;
+    	missedCallsList.get(callId).hide();
+    	missedCallsList.remove(callId);
+    }
+    
+    
+  }
+
+  public void removeMissedCall(SipCall call) {
+    missedCallsList.remove(call.callId);
+  }
+
+  private void startCall(SipEvent sipEvent) {
+    state = ONCALL;
+    
+    SipCall call = new SipCall();
+    call.init(sipEvent);
+    
+    OngoingCall callPopup = new OngoingCall();
+    callPopup.init(this,call);
+    callPopup.display();
+    
+    ongoingCall = callPopup;
+    
+    if (((OutgoingCall)incomingCallsList.get(OUTGOING_CALL)) != null) 
+    	((OutgoingCall)incomingCallsList.get(OUTGOING_CALL)).hide();
+    
+    incomingCallsList.remove(OUTGOING_CALL);
+    
+    
+  }
+
+  private void startCall(SipCall call) {
+    state = ONCALL;
+    
+    OngoingCall callPopup = new OngoingCall();
+    callPopup.init(this,call);
+    callPopup.display();
+    
+    ongoingCall = callPopup;
+    
+    if (((OutgoingCall)incomingCallsList.get(OUTGOING_CALL)) != null) 
+    	((OutgoingCall)incomingCallsList.get(OUTGOING_CALL)).hide();
+    
+    incomingCallsList.remove(OUTGOING_CALL);
+    
+    
+  }
+
+  public void stopOngoingCall() {
+    if (ongoingCall != null) {
+    
+    	AsyncCallback callback = new AsyncCallback() {
+    		public void onSuccess(Object result) {
+    		}
+    
+    		public void onFailure(Throwable caught) {
+    		}
+    	};
+    
+    	ProxyRPC.processCall(sessionId,ongoingCall.call,"BYE",0,callback);
+    	state = AVAILABLE;
+    	ongoingCall.stop();
+    	ongoingCall = null;
+    }
+    
+    
+  }
+
+  private void cancelIncomingCall(SipEvent sipEvent) {
+    if (incomingCallsList.get(sipEvent.callId) != null) {
+    	((IncomingCall)incomingCallsList.get(sipEvent.callId)).timeout();
+    	incomingCallsList.remove(sipEvent.callId);
+    }
+  }
+
+  public void cancelOutgoingCall(boolean originating) {
+    if (incomingCallsList.get(OUTGOING_CALL) != null) {
+    	SipCall call = ((OutgoingCall)incomingCallsList.get(OUTGOING_CALL)).call;
+    
+    	((OutgoingCall)incomingCallsList.get(OUTGOING_CALL)).hide();
+    	incomingCallsList.remove(OUTGOING_CALL);
+    
+    	if (!originating) {
+    		MissedCall missedCall = new MissedCall();
+    		missedCall.init(this,call,true);
+    		missedCall.display();
+    	} else {
+    	}
+    
+    
+    	AsyncCallback callback = new AsyncCallback() {
+       		public void onSuccess (Object callResult)
+       		{		
+    		}
+       
+    		public void onFailure (Throwable ex)
+       		{
+       		}
+    	};
+    
+    	ProxyRPC.cancelCall(sessionId,outgoingCallApplicationSessionId,callback);
+	
+	state = AVAILABLE;
+    }
+  }
+
+}

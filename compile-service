@@ -1,0 +1,4 @@
+#!/bin/sh
+javac -target 1.5 -Xlint:unchecked -Xlint:deprecation -cp "/mnt/server/GWT/gwt-1.5.3/src:/mnt/server/GWT/gwt-1.5.3/bin:/mnt/server/GWT/gwt-1.5.3/gwt-user.jar:/mnt/server/GWT/gwt-1.5.3/gwt-dev-linux.jar:/usr/src/tomcat-mobicents/lib/servlet-api.jar:/usr/src/tomcat-mobicents/lib/sip-servlets-impl-0.9.jar:/usr/src/tomcat-mobicents/lib/sip-servlets-spec-1.1.9.jar:/usr/src/tomcat-mobicents/lib/annotations-api.jar:/usr/src/tomcat-mobicents/lib/jain-sip-ri-1.2.96.jar:/mnt/server/Programmation/java/JMF-2.1.1e/lib/jmf.jar" /mnt/server/webapps-sources/src/fr/free/hd/bond/chatroom/ServiceServlets/*.java
+#javac -target 1.5 -cp "/usr/src/tomcat-mobicents/lib/servlet-api.jar:/usr/src/tomca-mobicents/lib/sip-servlets-impl-0.7.1.jar:/usr/src/tomcat-mobicents/lib/sip-servlets-spec-1.1.7.1.jar" /mnt/server/webapps-sources/src/fr/free/hd/bond/chatroom/$1
+

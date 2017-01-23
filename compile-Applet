@@ -1,0 +1,8 @@
+#!/bin/sh
+#javac -Xlint:deprecation  -Xlint:unchecked -cp ".:/mnt/server/Programmation/java/JMF-2.1.1e/lib/jmf.jar" fr/free/hd/bond/chatroom/Applet/*.java
+javac -Xlint:unchecked -Xlint:deprecation -cp ".:/mnt/server/Programmation/java/JMF-2.1.1e/lib/jmf.jar" fr/free/hd/bond/chatroom/Applet/*.java
+cp fr/free/hd/bond/chatroom/Applet/*.class /mnt/server/webapps-chatroom/Applet/fr/free/hd/bond/chatroom/Applet/
+cp fr/free/hd/bond/chatroom/client/SessionDescription.class /mnt/server/webapps-chatroom/Applet/fr/free/hd/bond/chatroom/client/
+rm -rf /mnt/server/webapps-chatroom/Applet/chatroom-applet.jar
+jar cvf /mnt/server/webapps-chatroom/Applet/chatroom-applet.jar -C /mnt/server/webapps-chatroom/Applet/ /mnt/server/webapps-chatroom/Applet/*
+jarsigner /mnt/server/webapps-chatroom/Applet/chatroom-applet.jar  webapps-chatroom-applet-certkey

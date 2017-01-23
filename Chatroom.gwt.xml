@@ -1,0 +1,27 @@
+<module>
+
+	<!-- Inherit the core Web Toolkit stuff.                  -->
+	<inherits name='com.google.gwt.user.User'/>
+	<inherits name="com.google.gwt.core.Core" />
+        <inherits name="com.google.gwt.user.UserAgent" />
+	<inherits name="com.google.gwt.xml.XML"/>
+	<inherits name="com.google.gwt.http.HTTP"/>
+	<inherits name='com.google.gwt.user.theme.standard.Standard'/>
+	<!-- 	<inherits name='com.google.gwt.gwtai.applet.AppletIntegration' /> -->
+
+        <!-- IE needs a different implementation -->
+        <replace-with
+                class="com.google.gwt.user.client.ui.impl.ClippedImageImplIE6">
+                <when-type-is
+                        class="com.google.gwt.user.client.ui.impl.ClippedImageImpl" />
+                <when-property-is name="user.agent" value="ie6" />
+        </replace-with>
+
+	<!-- Specify the app entry point class.                   -->
+	<entry-point class='fr.free.hd.bond.chatroom.client.Main'/>
+	<stylesheet src='Chatroom.css' />	
+	
+	<servlet path='/webapps-chatroom/chatroom-uac' class='fr.free.hd.bond.chatroom.SipServlet.UACSipServlet'/>
+	<servlet path='/webapps-chatroom/chatroom-server' class='fr.free.hd.bond.chatroom.server.ChatroomServicesImpl'/>
+  
+</module>

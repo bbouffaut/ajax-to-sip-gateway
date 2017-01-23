@@ -1,0 +1,162 @@
+/** Add css rules here for your application. */
+body {
+        text-align: center;
+}
+
+.main-panel {
+	width: 950px;
+	margin:0 auto;
+	text-align: left;
+}
+
+.messages-panel {
+	margin: 3px;
+}
+
+.users-list {
+	margin: 2px;
+/**	border: 1px solid #ccc;**/
+}
+
+
+.legend {
+	margin-left: 3px;
+	margin-top: 3px;
+	font-size: 15px;
+}
+
+.buddy-item {
+	margin: 3px;
+}
+
+.login-appli {
+	border: 1px solid #ccc;
+	padding: 2px;
+}
+
+.login-appli-title-container {
+	margin: 2px;
+	background: #d0e4f6;
+}
+
+.login-appli-title {
+	font: bold 16px;
+}
+
+.loading-popup {
+	border: 1px solid #ccc;
+	background: white;
+}
+
+.loading-popup-mask {
+        background: white;
+        opacity:0.6;
+        filter:alpha(opacity=60);
+	border: 0px;
+}
+
+.toolbar {
+	border: 1px solid #ccc;
+	margin-top: 5px;
+	margin-left: 3px;
+	margin-right: 3px;
+	margin-bottom: 8px;
+	padding: 2px;
+}
+
+.toolbar-button, .toolbar-button-over {
+        border-left: 1px solid #FFFFFF;
+        border-top: 1px solid #FFFFFF;
+        border-right: 2px solid #898989;
+        border-bottom: 2px solid #898989;
+        background: #e3e3e3;
+        margin: 1px;
+        padding: 1px;
+	cursor: pointer;
+	cursor: hand;
+}
+
+
+.toolbar-button-clicked {
+        border-left: 2px solid #898989;
+        border-top: 2px solid #898989;
+        border-right: 1px solid #FFFFFF;
+        border-bottom: 1px solid #FFFFFF;
+        background: #b4b4b4;
+        margin: 1px;
+        padding: 1px;
+	cursor: default;
+        }
+
+.toolbar-button-deactivated {
+        border: 1px solid #FFFFFF;
+        background: #e3e3e3;
+        opacity:0.4;
+        filter:alpha(opacity=40);
+        margin: 1px;
+        padding: 1px;
+        }
+
+.toolbar-button-legend-popup {
+        border: 1px solid blue;
+        background: #AADDFF;
+        font:  12px arial, tahoma, sans-serif;
+}
+
+.chatroom-message-normal {
+	font-size: 13px;
+	color: #15317E;
+}
+
+.chatroom-message-system {
+	font-size: 13px;
+	color: #F88017;
+	opacity: 0.4;
+	filter:alpha(opacity=40);
+}
+	
+.chatroom-buddy-normal {
+	font-size: 16px;
+	font-weight: bold;
+	/*color: #15317E;*/
+	color: #461B7E;
+}
+
+.chatroom-buddy-link {
+	font-size: 16px;
+	font-weight: bold;
+	/*color: #15317E;*/
+	color: #461B7E;
+	cursor: pointer;
+	cursor: hand;
+}
+
+.chatroom-buddy-nolink {
+	font-size: 16px;
+	font-weight: normal;
+	/*color: #15317E;*/
+	color: #461B7E;
+}
+
+
+.chatroom-buddy-unavailable {
+	font-size: 16px;
+	font-weight: normal;
+	font-style: italic;
+	/*color: #15317E;*/
+	color: #cccccc;
+}
+
+.buddy-tools {
+	font-size: 12px;
+	font-weight: normal;
+	color: #ccccc;
+	cursor: pointer;
+	cursor: hand;
+}
+
+.buddy-tools-popup {
+	border: 1px solid #cccccc;
+	background: #E3E4FA;
+}
+	
