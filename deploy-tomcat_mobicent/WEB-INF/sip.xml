@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sip-app>
+	<app-name>fr.free.hd.bond.chatroom.ChatRoomApplication</app-name>
+	<display-name>Chat Room Sip Service</display-name>
+	<description>ChatRoom Sip Service</description>
+
+	<servlet-selection>
+		<main-servlet>
+			UACSipServlet	
+		</main-servlet>
+	</servlet-selection>
+
+	<servlet>
+		<servlet-name>UACSipServlet</servlet-name>
+		<display-name>UACSipServlet</display-name>
+		<description>Chat Room Sip UAC</description>
+		<servlet-class>
+			fr.free.hd.bond.chatroom.ServiceServlets.UACSipServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+		<init-param>
+			<param-name>ServerAddress</param-name>
+			<param-value>192.168.1.130</param-value>
+
+			<param-name>BondDomain</param-name>
+			<param-value>bond.hd.free.fr</param-value>
+		</init-param>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>RoomSipServlet</servlet-name>
+		<display-name>RoomSipServlet</display-name>
+		<description>Chat Room Sip room engine</description>
+		<servlet-class>
+			fr.free.hd.bond.chatroom.ServiceServlets.RoomSipServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+		<init-param>
+			<param-name>ServerAddress</param-name>
+			<param-value>192.168.1.130</param-value>
+
+			<param-name>BondDomain</param-name>
+			<param-value>bond.hd.free.fr</param-value>
+		</init-param>
+	</servlet>
+
+	<resource-ref>
+                <description>MySQL DB</description>
+                <res-ref-name>jdbc/chatroom</res-ref-name>
+                <res-type>javax.sql.DataSource</res-type>
+                <res-auth>Container</res-auth>
+        </resource-ref>
+
+</sip-app>
