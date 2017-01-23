@@ -9,18 +9,18 @@ NB: this project is not maintained anymore since it is based on a AJAX polling a
 
 * SIP Features
 
-– Chatrooms / Instant Messaging
-– Presence
-– Telephony
-– Multimedia Content Sharing
+– Chatrooms / Instant Messaging<br>
+– Presence<br>
+– Telephony<br>
+– Multimedia Content Sharing<br>
 
 * Technologies
 
-- HTML5 / AJAX application
+- HTML5 / AJAX application<br>
 - SIP / HTTP servlets on top of Tomcat-mobicents application server
-(SIP API 1.1 – JSR 289)
+(SIP API 1.1 – JSR 289)<br>
 - Java Applet based on Java Media Framework (JMF) for media
-services (telephony, video)
+services (telephony, video)<br>
 
 * Architecture overview
 ![Chatroom Application Server presentation.png](https://bitbucket.org/repo/7jk8ry/images/3858223146-Chatroom%20Application%20Server%20presentation.png)
