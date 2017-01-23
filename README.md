@@ -36,4 +36,4 @@ services (telephony, video)
 
 ### Installation Guide ###
 
-There is no detailed set-up guide. Please contact me if you need further details about set-up of this project
+There is no detailed set-up guide. Please contact me if you need further details about project set-up.
