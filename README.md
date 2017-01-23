@@ -25,13 +25,15 @@ services (telephony, video)
 ### Architecture Overview ###
 ![Chatroom Application Server presentation.png](https://bitbucket.org/repo/7jk8ry/images/3858223146-Chatroom%20Application%20Server%20presentation.png)
 
-## How do I get set up? ##
+## Set-up ##
 
-This project requires:
+### Prerequisites ###
 
 * MySQL Server
 * Tomcat-Mobicent
 * GWT environment
 * Running SIP Server for interconnection with eco-system
+
+### Installation Guide ###
 
 There is no detailed set-up guide. Please contact me if you need further details about set-up of this project
